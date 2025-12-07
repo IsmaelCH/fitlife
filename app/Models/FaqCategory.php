@@ -4,16 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Faq extends Model
+class FaqCategory extends Model
 {
-    protected $fillable = [
-        'faq_category_id',
-        'question',
-        'answer',
-    ];
+    protected $fillable = ['name'];
 
-    public function category()
+    public function faqs()
     {
-        return $this->belongsTo(FaqCategory::class, 'faq_category_id');
+        return $this->hasMany(Faq::class);
     }
 }
