@@ -8,9 +8,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FaqCategoryController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 // Public news
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
