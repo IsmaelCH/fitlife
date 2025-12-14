@@ -12,16 +12,19 @@
         <div>
             <label class="block">Name *</label>
             <input class="border w-full" name="name" required value="{{ old('name') }}">
+            @error('name') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
         </div>
 
         <div>
             <label class="block">Email *</label>
             <input class="border w-full" type="email" name="email" required value="{{ old('email') }}">
+            @error('email') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
         </div>
 
         <div>
             <label class="block">Password *</label>
             <input class="border w-full" type="password" name="password" required minlength="8">
+            @error('password') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
         </div>
 
         <div>
