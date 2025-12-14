@@ -8,6 +8,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FaqCategoryController;
 
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
