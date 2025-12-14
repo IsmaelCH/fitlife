@@ -33,7 +33,7 @@
             @error('message') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
         </div>
 
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+        <button type="submit" class="bg-blue-500 text-zinc-800 px-4 py-2 rounded">
             Send
         </button>
     </form>

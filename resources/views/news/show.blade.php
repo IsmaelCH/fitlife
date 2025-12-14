@@ -15,17 +15,5 @@
         @endif
 
         <div class="mt-4 whitespace-pre-line">{{ $news->content }}</div>
-
-        @can('admin')
-            <div class="mt-4 flex gap-3">
-                <a class="underline" href="{{ route('news.edit', $news) }}">Edit</a>
-
-                <form method="POST" action="{{ route('news.destroy', $news) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button class="text-red-600 underline" type="submit">Delete</button>
-                </form>
-            </div>
-        @endcan
     </article>
 @endsection
