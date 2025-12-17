@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,30 +10,43 @@ class NewsController extends Controller
 {
     public function __construct()
     {
+        // Public can see index + show
+        // Only admins can create/edit/delete
         $this->middleware('auth')->except(['index', 'show']);
         $this->middleware('can:admin')->except(['index', 'show']);
     }
 
+    // PUBLIC: list
     public function index()
     {
-        $news = News::with('user')->latest('published_at')->paginate(10);
+        $news = News::with('user')
+            ->orderByDesc('published_at')
+            ->paginate(10);
+
         return view('news.index', compact('news'));
     }
 
-    public function create()
+    // PUBLIC: detail
+    public function show(News $news)
     {
-        $tags = Tag::all();
-        return view('news.create', compact('tags'));
+        $news->load('user');
+        return view('news.show', compact('news'));
     }
 
+    // ADMIN: form create
+    public function create()
+    {
+        return view('news.create');
+    }
+
+    // ADMIN: store
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|image|max:2048',
             'published_at' => 'nullable|date',
-            'tags' => 'array',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $data = [
@@ -50,34 +62,23 @@ class NewsController extends Controller
 
         $news = News::create($data);
 
-        if (!empty($validated['tags'])) {
-            $news->tags()->sync($validated['tags']);
-        }
-
         return redirect()->route('news.show', $news)->with('success', 'News created.');
     }
 
-    public function show(News $news)
-    {
-        $news->load('user', 'tags');
-        return view('news.show', compact('news'));
-    }
-
+    // ADMIN: edit form
     public function edit(News $news)
     {
-        $tags = Tag::all();
-        $news->load('tags');
-        return view('news.edit', compact('news', 'tags'));
+        return view('news.edit', compact('news'));
     }
 
+    // ADMIN: update
     public function update(Request $request, News $news)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|image|max:2048',
             'published_at' => 'nullable|date',
-            'tags' => 'array',
+            'image' => 'nullable|image|max:2048',
         ]);
 
         $data = [
@@ -87,6 +88,7 @@ class NewsController extends Controller
         ];
 
         if ($request->hasFile('image')) {
+            // delete old image
             if ($news->image_path) {
                 Storage::disk('public')->delete($news->image_path);
             }
@@ -94,17 +96,17 @@ class NewsController extends Controller
         }
 
         $news->update($data);
-        $news->tags()->sync($validated['tags'] ?? []);
 
         return redirect()->route('news.show', $news)->with('success', 'News updated.');
     }
 
+    // ADMIN: delete
     public function destroy(News $news)
     {
         if ($news->image_path) {
             Storage::disk('public')->delete($news->image_path);
         }
-        $news->tags()->detach();
+
         $news->delete();
 
         return redirect()->route('news.index')->with('success', 'News deleted.');
