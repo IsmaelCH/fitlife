@@ -1,39 +1,46 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Profile')
+@section('title', 'Edit profile')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">Edit Profile</h1>
-
-    <form method="POST" action="{{ route('profiles.update') }}" enctype="multipart/form-data"
-          class="bg-white p-4 rounded shadow space-y-3">
+    <form
+        method="POST"
+        action="{{ route('profiles.update') }}"
+        enctype="multipart/form-data"
+        class="bg-white p-6 rounded shadow max-w-xl mx-auto space-y-4"
+    >
         @csrf
 
         <div>
-            <label class="block">Username</label>
-            <input class="border w-full" name="username" value="{{ old('username', $user->username) }}">
-            @error('username') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+            <label>Username</label>
+            <input class="border w-full"
+                   name="username"
+                   value="{{ old('username', $user->username) }}">
         </div>
 
         <div>
-            <label class="block">Birthday</label>
-            <input class="border w-full" type="date" name="birthday"
+            <label>Birthday</label>
+            <input type="date"
+                   class="border w-full"
+                   name="birthday"
                    value="{{ old('birthday', optional($user->birthday)->format('Y-m-d')) }}">
-            @error('birthday') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
         </div>
 
         <div>
-            <label class="block">Bio</label>
-            <textarea class="border w-full" name="bio">{{ old('bio', $user->bio) }}</textarea>
-            @error('bio') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+            <label>About me</label>
+            <textarea class="border w-full"
+                      name="bio">{{ old('bio', $user->bio) }}</textarea>
         </div>
 
         <div>
-            <label class="block">Profile photo</label>
-            <input type="file" name="profile_photo" accept="image/*">
-            @error('profile_photo') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+            <label>Profile photo</label>
+            <input type="file"
+                   name="profile_photo"
+                   accept="image/*">
         </div>
 
-        <button class="bg-blue-600 text-red-700 px-4 py-2 rounded">Save</button>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">
+            Save
+        </button>
     </form>
 @endsection

@@ -1,57 +1,61 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FaqCategoryController;
-use App\Models\News;
-use App\Models\FaqCategory;
 
+// Home & Dashboard (NO closures)
+Route::get('/', [PageController::class, 'home'])->name('home');
 
-Route::get('/', function () {
-    $latestNews = News::latest('published_at')->take(3)->get();
-    $faqCategories = FaqCategory::with('faqs')->orderBy('name')->get();
+Route::get('/dashboard', [PageController::class, 'dashboard'])
+    ->middleware(['auth'])
+    ->name('dashboard');
 
-    return view('home', compact('latestNews', 'faqCategories'));
-})->name('home');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-// Public news
+// Public
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
 
-// Public profile
+Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
+
+Route::get('/contact', [ContactController::class, 'showForm'])->name('contact.form');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
 Route::get('/profiles/{user}', [ProfileController::class, 'show'])->name('profiles.show');
 
-// Logged-in profile edit
+// Auth-only (own profile edit)
 Route::middleware('auth')->group(function () {
     Route::get('/me/profile/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
     Route::post('/me/profile', [ProfileController::class, 'update'])->name('profiles.update');
 });
 
-// Contact
-Route::get('/contact', [ContactController::class, 'showForm'])->name('contact.form');
-Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
-
-// FAQ public
-Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
-
-// Admin
+// Admin-only
 Route::middleware(['auth', 'can:admin'])->group(function () {
-    Route::resource('news', NewsController::class)->except(['index', 'show']);
-    Route::resource('faq-categories', FaqCategoryController::class);
-    Route::resource('faqs', FaqController::class)->except(['index']);
-
+    // Admin user management
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users.index');
     Route::get('/admin/users/create', [AdminController::class, 'create'])->name('admin.users.create');
     Route::post('/admin/users', [AdminController::class, 'store'])->name('admin.users.store');
     Route::post('/admin/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('admin.users.toggleAdmin');
+
+    // News CRUD for admin
+    Route::resource('news', NewsController::class)->except(['index', 'show']);
+
+    // FAQ admin CRUD
+    Route::resource('faq-categories', FaqCategoryController::class);
+    Route::resource('faqs', FaqController::class)->except(['index', 'show']);
 });
 
+Route::get('/profiles/{user}', [ProfileController::class, 'show'])->name('profiles.show');
+
+
+
+
+
+
+// Breeze auth routes
 require __DIR__.'/auth.php';
