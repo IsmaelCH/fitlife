@@ -7,15 +7,9 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FaqCategoryController;
-use App\Models\News;
-use App\Models\FaqCategory;
-
 
 Route::get('/', function () {
-    $latestNews = News::latest('published_at')->take(3)->get();
-    $faqCategories = FaqCategory::with('faqs')->orderBy('name')->get();
-
-    return view('home', compact('latestNews', 'faqCategories'));
+    return view('welcome');
 })->name('home');
 
 Route::get('/dashboard', function () {
