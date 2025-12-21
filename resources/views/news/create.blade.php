@@ -12,7 +12,6 @@
         <div>
             <label class="block">Title *</label>
             <input class="border w-full" name="title" required value="{{ old('title') }}">
-            @error('title') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
         </div>
 
         <div>

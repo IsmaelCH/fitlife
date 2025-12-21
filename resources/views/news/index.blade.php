@@ -1,38 +1,29 @@
 @extends('layouts.app')
 
-@section('title', 'News')
+@section('title', 'FitLife News')
 
 @section('content')
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">News</h1>
-
-        @can('admin')
-            <a class="underline" href="{{ route('news.create') }}">Create news</a>
-        @endcan
-    </div>
+    <h1 class="text-2xl font-bold mb-4">Latest FitLife News</h1>
 
     @foreach($news as $item)
-        <div class="bg-white p-4 rounded shadow mb-4">
-            <a class="text-xl font-semibold underline" href="{{ route('news.show', $item) }}">
-                {{ $item->title }}
-            </a>
-
-            <div class="text-sm text-gray-500 mt-1">
-                @if($item->published_at) {{ $item->published_at->format('d/m/Y H:i') }} @endif
-                — by {{ $item->user->username ?? $item->user->name }}
-            </div>
-
+        <article class="bg-white p-4 rounded shadow mb-4">
+            <h2 class="text-xl font-semibold">
+                <a href="{{ route('news.show', $item) }}">{{ $item->title }}</a>
+            </h2>
+            <p class="text-sm text-gray-500">
+                By {{ $item->user->username ?? $item->user->name }}
+                @if($item->published_at)
+                    - {{ $item->published_at->format('d/m/Y') }}
+                @endif
+            </p>
             @if($item->image_path)
-                <img class="mt-3 max-h-56" src="{{ asset('storage/' . $item->image_path) }}" alt="News image">
+                <img src="{{ asset('storage/' . $item->image_path) }}" alt="News image" class="mt-2 max-h-64">
             @endif
-
-            <p class="mt-3">
+            <p class="mt-2">
                 {{ \Illuminate\Support\Str::limit($item->content, 150) }}
             </p>
-        </div>
+        </article>
     @endforeach
 
-    <div class="mt-4">
-        {{ $news->links() }}
-    </div>
+    {{ $news->links() }}
 @endsection
