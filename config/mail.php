@@ -109,6 +109,7 @@ return [
     | used globally for all emails that are sent by your application.
     |
     */
+    'admin_email' => env('ADMIN_EMAIL', 'admin@ehb.be'),
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),

@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Contact;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,16 +10,16 @@ class ContactReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Contact $contact;
+    public array $data;
 
-    public function __construct(Contact $contact)
+    public function __construct(array $data)
     {
-        $this->contact = $contact;
+        $this->data = $data;
     }
 
     public function build()
     {
-        return $this->subject('New contact message from FitLife')
-            ->markdown('emails.contact.received');
+        return $this->subject('New contact message')
+            ->view('emails.contact.received');
     }
 }

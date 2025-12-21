@@ -1,12 +1,7 @@
-@component('mail::message')
-    # New Contact Message
+<h2>New contact message</h2>
 
-    **Name:** {{ $contact->name ?? 'N/A' }}
-    **Email:** {{ $contact->email }}
-    **Subject:** {{ $contact->subject ?? 'N/A' }}
+<p><strong>Name:</strong> {{ $data['name'] }}</p>
+<p><strong>Email:</strong> {{ $data['email'] }}</p>
 
-    **Message:**
-
-    {{ $contact->message }}
-
-@endcomponent
+<p><strong>Message:</strong></p>
+<p>{{ $data['message'] }}</p>

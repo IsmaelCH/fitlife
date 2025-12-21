@@ -2,32 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contact;
 use Illuminate\Http\Request;
-use App\Mail\ContactReceived;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactReceived;
 
 class ContactController extends Controller
 {
+    // Show contact form (public)
     public function showForm()
     {
         return view('contact.form');
     }
 
+    // Handle form submit
     public function submit(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'nullable|string|max:255',
-            'email' => 'required|email',
-            'subject' => 'nullable|string|max:255',
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email',
             'message' => 'required|string',
         ]);
 
-        $contact = Contact::create($validated);
+        // Send email to admin
+        Mail::to(config('mail.admin_email'))
+            ->send(new ContactReceived($validated));
 
-        $adminEmail = config('mail.admin_address', env('ADMIN_EMAIL', 'admin@ehb.be'));
-        Mail::to($adminEmail)->send(new ContactReceived($contact));
-
-        return redirect()->route('contact.form')->with('success', 'Message sent.');
+        return redirect()
+            ->route('contact.form')
+            ->with('success', 'Your message has been sent.');
     }
 }
