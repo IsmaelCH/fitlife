@@ -3,17 +3,21 @@
 @section('title', 'Admin - Edit Category')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">Edit FAQ Category</h1>
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-8">Edit FAQ Category</h1>
 
-    <form method="POST" action="{{ route('faq-categories.update', $faqCategory) }}" class="bg-white p-4 rounded shadow space-y-3">
-        @csrf
-        @method('PUT')
+        <form method="POST" action="{{ route('faq-categories.update', $faqCategory) }}" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-6 transition-colors duration-300">
+            @csrf
+            @method('PUT')
 
-        <div>
-            <label class="block">Name *</label>
-            <input class="border w-full" name="name" required value="{{ old('name', $faqCategory->name) }}">
-        </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name *</label>
+                <input class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-gray-900 dark:focus:border-gray-400 focus:ring-gray-900 dark:focus:ring-gray-400 sm:text-sm" name="name" required value="{{ old('name', $faqCategory->name) }}">
+            </div>
 
-        <button class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
-    </form>
+            <div class="pt-2">
+                <button class="w-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2.5 rounded-md hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors font-medium shadow-sm">Save Changes</button>
+            </div>
+        </form>
+    </div>
 @endsection
