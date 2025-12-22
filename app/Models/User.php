@@ -40,4 +40,10 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\News::class);
     }
 
+    public function newsComments()
+    {
+        return $this->hasMany(\App\Models\NewsComment::class);
+    }
+
+
 }

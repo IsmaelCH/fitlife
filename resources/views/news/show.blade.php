@@ -31,4 +31,45 @@
             </div>
         @endcan
     </article>
+
+    <div class="bg-white p-6 rounded shadow mt-6">
+        <h2 class="text-xl font-semibold">Comments</h2>
+
+        @auth
+            <form method="POST" action="{{ route('news.comments.store', $news) }}" class="mt-4 space-y-2">
+                @csrf
+                <textarea name="body" class="border w-full" rows="3" required maxlength="1000"
+                          placeholder="Write your comment...">{{ old('body') }}</textarea>
+                @error('body') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+                <button class="bg-blue-600 text-white px-4 py-2 rounded">Post comment</button>
+            </form>
+        @else
+            <p class="mt-3 text-gray-600">Login to post a comment.</p>
+        @endauth
+
+        <div class="mt-6 space-y-4">
+            @forelse($news->comments as $c)
+                <div class="border-t pt-3">
+                    <div class="text-sm text-gray-500">
+                        {{ $c->user->username ?? $c->user->name }}
+                        • {{ $c->created_at->format('d/m/Y H:i') }}
+                    </div>
+                    <div class="mt-1">{{ $c->body }}</div>
+
+                    @auth
+                        @if(auth()->user()->can('admin') || auth()->id() === $c->user_id)
+                            <form method="POST" action="{{ route('news.comments.destroy', $c) }}" class="mt-2">
+                                @csrf
+                                @method('DELETE')
+                                <button class="text-red-600 underline text-sm">Delete</button>
+                            </form>
+                        @endif
+                    @endauth
+                </div>
+            @empty
+                <p class="mt-3 text-gray-600">No comments yet.</p>
+            @endforelse
+        </div>
+    </div>
+
 @endsection

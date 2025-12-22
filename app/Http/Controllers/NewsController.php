@@ -29,9 +29,10 @@ class NewsController extends Controller
     // PUBLIC: detail
     public function show(News $news)
     {
-        $news->load('user');
+        $news->load(['user', 'comments.user']);
         return view('news.show', compact('news'));
     }
+
 
     // ADMIN: create form
     public function create()

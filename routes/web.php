@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\NewsCommentController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
@@ -86,6 +86,17 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::resource('faq-categories', FaqCategoryController::class);
     Route::resource('faqs', FaqController::class)
         ->except(['index', 'show']);
+
+
+    Route::middleware('auth')->group(function () {
+        Route::post('/news/{news}/comments', [NewsCommentController::class, 'store'])
+            ->whereNumber('news')
+            ->name('news.comments.store');
+
+        Route::delete('/news-comments/{comment}', [NewsCommentController::class, 'destroy'])
+            ->name('news.comments.destroy');
+    });
+
 });
 
 /*
