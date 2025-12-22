@@ -18,14 +18,18 @@ class ContactController extends Controller
     public function submit(Request $request)
     {
         $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email',
-            'message' => 'required|string',
+            'name' => 'nullable|string|max:255',
+            'email' => 'required|email',
+            'subject' => 'nullable|string|max:255',
+            'message' => 'required|string|max:2000',
         ]);
 
-        // Send email to admin
-        Mail::to(config('mail.admin_email'))
-            ->send(new ContactReceived($validated));
+        // Save in DB
+        $contact = \App\Models\Contact::create($validated);
+
+        // Email to admin
+        \Illuminate\Support\Facades\Mail::to(config('mail.admin_email'))
+            ->send(new \App\Mail\ContactReceived($validated));
 
         return redirect()
             ->route('contact.form')

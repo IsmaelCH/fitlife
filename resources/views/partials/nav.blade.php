@@ -10,6 +10,8 @@
                 <a href="{{ route('profiles.show', auth()->user()) }}">My Profile</a>
                 @can('admin')
                     <a href="{{ route('admin.users.index') }}">Admin</a>
+                    <a href="{{ route('admin.contacts.index') }}">Contacts</a>
+
                 @endcan
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf

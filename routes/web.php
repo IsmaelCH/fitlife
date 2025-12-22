@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\AdminContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsCommentController;
 use App\Http\Controllers\PageController;
@@ -66,6 +66,16 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'can:admin'])->group(function () {
 
     // Admin users
+    Route::get('/admin/contacts', [AdminContactController::class, 'index'])
+        ->name('admin.contacts.index');
+
+    Route::get('/admin/contacts/{contact}', [AdminContactController::class, 'show'])
+        ->name('admin.contacts.show');
+
+    Route::post('/admin/contacts/{contact}/reply', [AdminContactController::class, 'reply'])
+        ->name('admin.contacts.reply');
+
+
     Route::get('/admin/users', [AdminController::class, 'index'])
         ->name('admin.users.index');
 
