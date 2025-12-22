@@ -1,59 +1,88 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# FitLife — Laravel Data-Driven Web Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+FitLife is a minimal and modern fitness community website built with Laravel.
+The project demonstrates authentication, role management, CRUD operations,
+database relations, and a clean MVC structure.
 
-## About Laravel
+This project was developed as part of an assignment for Erasmus Hogeschool Brussel.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Authentication
+- User registration and login
+- Logout and “remember me”
+- Password reset (forgot password)
+- Default admin account created via seeder
 
-## Learning Laravel
+### User roles
+- Users are either **regular users** or **admins**
+- Only admins can:
+  - create users manually
+  - promote or demote users to admin
+  - manage news, FAQ, and contact messages
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Public profiles
+- Every user has a **public profile page** (accessible without login)
+- Logged-in users can edit their own profile:
+  - username (optional)
+  - birthday (optional)
+  - bio (optional)
+  - profile photo upload (stored on the server)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### News
+- Public news list and detail pages
+- Admin CRUD (create, edit, delete news)
+- Each news item contains:
+  - title
+  - image (stored on server)
+  - content
+  - publication date
 
-## Laravel Sponsors
+### FAQ
+- Public FAQ page grouped by categories
+- Admin CRUD for FAQ categories and questions
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Contact
+- Public contact form
+- When submitted, the admin receives an email
+- Admin panel to view all contact messages and reply by email (extra feature)
 
-### Premium Partners
+### Extra features
+- Users can comment on news items
+- Admin contact inbox with reply functionality
+- Profile wall (users can post messages on other users’ profiles)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## Technical requirements
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- PHP 8.4+
+- Composer
+- Node.js + npm
+- Laravel 12
+- SQLite (default) or MySQL
+- Herd or any local PHP server
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Sources / References
 
-## Security Vulnerabilities
+- Laravel Documentation  
+  https://laravel.com/docs
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Laravel Breeze (authentication starter kit)  
+  https://laravel.com/docs/starter-kits#laravel-breeze
 
-## License
+- Tailwind CSS Documentation (UI styling)  
+  https://tailwindcss.com/docs
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- PHP Documentation  
+  https://www.php.net/docs.php
+
+- OpenAI ChatGPT  
+  https://chat.openai.com  
+  Used as a learning and support tool for understanding Laravel concepts,
+  debugging errors, and improving code structure. All final code decisions
+  and implementation were done by the student.
