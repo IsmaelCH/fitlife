@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\ProfilePostController;
 use App\Http\Controllers\AdminContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsCommentController;
@@ -57,6 +58,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/me/profile', [ProfileController::class, 'update'])
         ->name('profiles.update');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::post('/profiles/{user}/posts', [ProfilePostController::class, 'store'])
+        ->name('profiles.posts.store');
+
+    Route::delete('/profile-posts/{post}', [ProfilePostController::class, 'destroy'])
+        ->name('profiles.posts.destroy');
+});
+
 
 /*
 |--------------------------------------------------------------------------

@@ -11,8 +11,10 @@ class ProfileController extends Controller
     // Publiek profiel
     public function show(User $user)
     {
+        $user->load(['profilePosts.author']);
         return view('profiles.show', compact('user'));
     }
+
 
     // Eigen profiel bewerken
     public function edit()

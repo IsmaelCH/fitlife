@@ -45,5 +45,16 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\NewsComment::class);
     }
 
+    public function profilePosts()
+    {
+        return $this->hasMany(\App\Models\ProfilePost::class, 'profile_user_id')->latest();
+    }
+
+    public function writtenProfilePosts()
+    {
+        return $this->hasMany(\App\Models\ProfilePost::class, 'author_user_id');
+    }
+
+
 
 }
