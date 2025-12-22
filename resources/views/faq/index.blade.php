@@ -3,20 +3,24 @@
 @section('title', 'FAQ')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">FAQ</h1>
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-8">FAQ</h1>
 
-    @foreach($categories as $cat)
-        <div class="bg-white p-4 rounded shadow mb-4">
-            <h2 class="text-xl font-semibold">{{ $cat->name }}</h2>
+    <div class="space-y-6">
+        @foreach($categories as $cat)
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">{{ $cat->name }}</h2>
 
-            @forelse($cat->faqs as $faq)
-                <div class="mt-3">
-                    <p class="font-semibold">{{ $faq->question }}</p>
-                    <p>{{ $faq->answer }}</p>
+                <div class="space-y-4">
+                    @forelse($cat->faqs as $faq)
+                        <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-0 last:pb-0">
+                            <p class="font-medium text-gray-900 dark:text-white mb-2">{{ $faq->question }}</p>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">{{ $faq->answer }}</p>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">No questions yet.</p>
+                    @endforelse
                 </div>
-            @empty
-                <p class="text-gray-500 mt-2">No questions yet.</p>
-            @endforelse
-        </div>
-    @endforeach
+            </div>
+        @endforeach
+    </div>
 @endsection

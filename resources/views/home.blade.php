@@ -3,48 +3,48 @@
 @section('title', 'FitLife')
 
 @section('content')
-    <div class="bg-white p-6 rounded shadow mb-6">
-        <h1 class="text-2xl font-bold">FitLife</h1>
-        <p class="mt-2">
+    <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-8 transition-colors duration-300">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">FitLife</h1>
+        <p class="mt-3 text-lg text-gray-600 dark:text-gray-300">
             A simple fitness community website with profiles, news, FAQ and contact.
         </p>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white p-4 rounded shadow">
-            <div class="flex justify-between items-center">
-                <h2 class="text-xl font-semibold">Latest News</h2>
-                <a class="underline" href="{{ route('news.index') }}">View all</a>
+    <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Latest News</h2>
+                <a class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" href="{{ route('news.index') }}">View all</a>
             </div>
 
             @forelse($latestNews as $n)
-                <div class="border-t py-3">
-                    <a class="font-semibold underline" href="{{ route('news.show', $n) }}">
+                <div class="border-t border-gray-100 dark:border-gray-700 py-4 first:border-t-0">
+                    <a class="font-medium text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors block mb-1" href="{{ route('news.show', $n) }}">
                         {{ $n->title }}
                     </a>
-                    <div class="text-sm text-gray-500">
-                        @if($n->published_at) {{ $n->published_at->format('d/m/Y H:i') }} @endif
+                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                        @if($n->published_at) {{ $n->published_at->format('M d, Y') }} @endif
                     </div>
                 </div>
             @empty
-                <p class="mt-3 text-gray-500">No news yet.</p>
+                <p class="mt-3 text-gray-500 dark:text-gray-400 text-sm">No news yet.</p>
             @endforelse
         </div>
 
-        <div class="bg-white p-4 rounded shadow">
-            <div class="flex justify-between items-center">
-                <h2 class="text-xl font-semibold">FAQ</h2>
-                <a class="underline" href="{{ route('faq.index') }}">Open FAQ</a>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">FAQ</h2>
+                <a class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" href="{{ route('faq.index') }}">Open FAQ</a>
             </div>
 
             @forelse($faqCategories as $cat)
-                <div class="border-t py-3">
-                    <div class="font-semibold">{{ $cat->name }}</div>
+                <div class="border-t border-gray-100 dark:border-gray-700 py-4 first:border-t-0">
+                    <div class="font-medium text-gray-900 dark:text-white mb-1">{{ $cat->name }}</div>
 
                     @if($cat->faqs->count() > 0)
-                        <div class="text-sm text-gray-700">{{ $cat->faqs->first()->question }}</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{{ $cat->faqs->first()->question }}</div>
                     @else
-                        <div class="text-sm text-gray-500">No questions yet.</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">No questions yet.</div>
                     @endif
                 </div>
             @empty
