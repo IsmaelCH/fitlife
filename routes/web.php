@@ -65,6 +65,13 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/profile-posts/{post}', [ProfilePostController::class, 'destroy'])
         ->name('profiles.posts.destroy');
+
+    Route::post('/news/{news}/comments', [NewsCommentController::class, 'store'])
+        ->whereNumber('news')
+        ->name('news.comments.store');
+
+    Route::delete('/news-comments/{comment}', [NewsCommentController::class, 'destroy'])
+        ->name('news.comments.destroy');
 });
 
 
@@ -106,16 +113,6 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::resource('faq-categories', FaqCategoryController::class);
     Route::resource('faqs', FaqController::class)
         ->except(['index', 'show']);
-
-
-    Route::middleware('auth')->group(function () {
-        Route::post('/news/{news}/comments', [NewsCommentController::class, 'store'])
-            ->whereNumber('news')
-            ->name('news.comments.store');
-
-        Route::delete('/news-comments/{comment}', [NewsCommentController::class, 'destroy'])
-            ->name('news.comments.destroy');
-    });
 
 });
 

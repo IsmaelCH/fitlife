@@ -30,4 +30,10 @@ class News extends Model
         return $this->hasMany(\App\Models\NewsComment::class)->latest();
     }
 
+    // Scope for published news
+    public function scopePublished($query)
+    {
+        return $query->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
 }

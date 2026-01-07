@@ -47,7 +47,9 @@ class User extends Authenticatable
 
     public function profilePosts()
     {
-        return $this->hasMany(\App\Models\ProfilePost::class, 'profile_user_id')->latest();
+        return $this->hasMany(\App\Models\ProfilePost::class, 'profile_user_id')
+            ->latest()
+            ->limit(50);
     }
 
     public function writtenProfilePosts()

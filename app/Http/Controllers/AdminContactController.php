@@ -11,7 +11,9 @@ class AdminContactController extends Controller
 {
     public function index()
     {
-        $contacts = Contact::orderByDesc('created_at')->paginate(15);
+        $contacts = Contact::with('repliedBy:id,name,username')
+            ->orderByDesc('created_at')
+            ->paginate(15);
         return view('admin.contacts.index', compact('contacts'));
     }
 

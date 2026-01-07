@@ -11,6 +11,11 @@ class ProfileController extends Controller
     // Publiek profiel
     public function show(User $user)
     {
+        $user->load(['profilePosts' => function ($query) {
+            $query->with('author:id,name,username')
+                ->latest()
+                ->limit(50);
+        }]);
         $user->load(['profilePosts.author']);
         return view('profiles.show', compact('user'));
     }
