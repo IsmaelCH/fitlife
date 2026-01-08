@@ -30,6 +30,11 @@ class News extends Model
         return $this->hasMany(\App\Models\NewsComment::class)->latest();
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'news_tag');
+    }
+
     // Scope for published news
     public function scopePublished($query)
     {

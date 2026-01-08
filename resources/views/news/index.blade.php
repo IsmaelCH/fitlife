@@ -22,6 +22,25 @@
         @endcan
     </div>
 
+    @if(isset($tags) && $tags->count() > 0)
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4">
+                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                <h2 class="text-lg font-light text-gray-900 dark:text-white">Filter by Tag</h2>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('news.index') }}" class="inline-flex items-center px-4 py-2 rounded-full text-sm font-light transition-all {{ !request('tag') ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
+                    All
+                </a>
+                @foreach($tags as $tag)
+                    <a href="{{ route('news.index', ['tag' => $tag->id]) }}" class="inline-flex items-center px-4 py-2 rounded-full text-sm font-light transition-all {{ request('tag') == $tag->id ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600' }}">
+                        {{ $tag->name }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @forelse($news as $item)
             <article class="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-2xl hover:-translate-y-1 duration-300 cursor-pointer news-item" data-news-id="{{ $item->id }}">
@@ -50,6 +69,16 @@
                             {{ $item->user->username ?? $item->user->name }}
                         </span>
                     </div>
+
+                    @if($item->tags->count() > 0)
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            @foreach($item->tags as $tag)
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-light bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600">
+                                    {{ $tag->name }}
+                                </span>
+                            @endforeach
+                        </div>
+                    @endif
 
                     <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3 font-light">
                         {{ \Illuminate\Support\Str::limit($item->content, 120) }}
@@ -225,8 +254,8 @@
 
         function renderComments(comments, newsAuthorId) {
             const commentsList = document.getElementById('commentsList');
-            const currentUserId = {{ auth()->id() ?? 'null' }};
-            const isAdmin = {{ auth()->check() && auth()->user()->can('admin') ? 'true' : 'false' }};
+            const currentUserId = {!! auth()->id() ?? 'null' !!};
+            const isAdmin = {!! auth()->check() && auth()->user()->can('admin') ? 'true' : 'false' !!};
             
             if (comments.length === 0) {
                 commentsList.innerHTML = `

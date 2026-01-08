@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class FitnessApiService
 {
@@ -35,7 +36,7 @@ class FitnessApiService
 
                 return collect([]);
             } catch (\Exception $e) {
-                \Log::error('Fitness API Error: ' . $e->getMessage());
+                Log::error('Fitness API Error: ' . $e->getMessage());
                 return collect([]);
             }
         });
@@ -68,7 +69,7 @@ class FitnessApiService
 
                 return collect([]);
             } catch (\Exception $e) {
-                \Log::error('Fitness API Error: ' . $e->getMessage());
+                Log::error('Fitness API Error: ' . $e->getMessage());
                 return collect([]);
             }
         });
@@ -99,7 +100,7 @@ class FitnessApiService
 
                 return collect([]);
             } catch (\Exception $e) {
-                \Log::error('Fitness API Error: ' . $e->getMessage());
+                Log::error('Fitness API Error: ' . $e->getMessage());
                 return collect([]);
             }
         });

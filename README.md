@@ -39,6 +39,14 @@ This project was developed as part of an assignment for Erasmus Hogeschool Bruss
   - image (stored on server)
   - content
   - publication date
+- **Tag system with many-to-many relationship**
+  - News articles can be tagged with multiple categories
+  - Filter news by tags
+  - Visual tag badges on news cards
+- **Comment system with AJAX functionality**
+  - Users can comment on news articles
+  - Real-time comment loading without page refresh
+  - Modal popup for full article view with comments
 
 ### FAQ
 - Public FAQ page grouped by categories
@@ -50,11 +58,15 @@ This project was developed as part of an assignment for Erasmus Hogeschool Bruss
 - Admin panel to view all contact messages and reply by email (extra feature)
 
 ### Extra features
-- Users can comment on news items
-- Admin contact inbox with reply functionality
-- Profile wall (users can post messages on other users’ profiles)- Profile post comments (users can comment on wall posts)
-- Modal popups for viewing full news articles and profile posts
-- Wger Fitness API integration for exercises, nutrition, and workout plans
+- **News comment system** — Users can comment on news articles with AJAX-powered real-time updates
+- **Tag filtering** — Filter news by tags using many-to-many relationship
+- **Admin contact inbox** — View all contact messages and reply by email
+- **Profile wall** — Users can post messages on other users' profiles
+- **Profile post comments** — Users can comment on wall posts
+- **Modal popups** — View full news articles and profile posts in elegant modals
+- **Wger Fitness API integration** — Display exercises, nutrition info, and workout plans
+- **Dark mode support** — Complete dark mode with smooth transitions
+- **Responsive design** — Mobile-first approach with Tailwind CSS
 ---
 
 ## Technical Stack
@@ -95,8 +107,33 @@ This project was developed as part of an assignment for Erasmus Hogeschool Bruss
 10. Start server: `php artisan serve` or use Laravel Herd
 
 Default admin credentials (from seeder):
-- Email: admin@fitlife.test
-- Password: password
+- Username: admin
+- Email: admin@ehb.be
+- Password: Password!321
+
+---
+
+## Database Relationships
+
+The project demonstrates proper use of Eloquent relationships:
+
+### One-to-Many relationships
+- **User → News** (hasMany): A user can create multiple news articles
+- **News → NewsComment** (hasMany): A news article can have multiple comments
+- **User → NewsComment** (hasMany): A user can write multiple comments
+- **User → ProfilePost** (hasMany): A user can have multiple wall posts on their profile
+- **ProfilePost → ProfilePostComment** (hasMany): A post can have multiple comments
+- **FaqCategory → Faq** (hasMany): A category contains multiple FAQ items
+- **User → Contact** (hasMany): A user can submit multiple contact messages
+
+### Many-to-Many relationship
+- **News ↔ Tag** (belongsToMany): News articles can have multiple tags, and tags can be applied to multiple articles
+  - Pivot table: `news_tag`
+  - Allows filtering news by category/topic
+  - Demonstrates proper many-to-many implementation
+
+### Belongs-to relationships
+All inverse relationships properly defined using `belongsTo`
 
 ---
 

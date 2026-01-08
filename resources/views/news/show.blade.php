@@ -14,6 +14,16 @@
             <span>{{ $news->user->username ?? $news->user->name }}</span>
         </div>
 
+        @if($news->tags->count() > 0)
+            <div class="flex flex-wrap gap-2 mb-6">
+                @foreach($news->tags as $tag)
+                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-light bg-gray-900 dark:bg-white text-white dark:text-gray-900">
+                        {{ $tag->name }}
+                    </span>
+                @endforeach
+            </div>
+        @endif
+
         @if($news->image_path)
             <img class="mb-8 rounded-lg w-full object-cover max-h-[500px]" src="{{ asset('storage/' . $news->image_path) }}" alt="News image">
         @endif

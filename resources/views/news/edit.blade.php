@@ -40,6 +40,19 @@
             @endif
         </div>
 
+        <div>
+            <label class="block mb-3 font-medium text-gray-700">Tags</label>
+            <div class="flex flex-wrap gap-2">
+                @foreach($tags as $tag)
+                    <label class="inline-flex items-center px-4 py-2 rounded-full border-2 border-gray-300 hover:border-gray-900 transition-all cursor-pointer has-[:checked]:bg-gray-900 has-[:checked]:text-white has-[:checked]:border-gray-900">
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="sr-only" {{ in_array($tag->id, old('tags', $news->tags->pluck('id')->toArray())) ? 'checked' : '' }}>
+                        <span class="text-sm font-light">{{ $tag->name }}</span>
+                    </label>
+                @endforeach
+            </div>
+            @error('tags') <p class="text-red-600 text-sm mt-2">{{ $message }}</p> @enderror
+        </div>
+
         <button class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
     </form>
 @endsection

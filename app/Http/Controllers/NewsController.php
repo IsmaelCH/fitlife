@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\Tag;
 use App\Services\FitnessApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -18,11 +19,20 @@ class NewsController extends Controller
     }
 
     // PUBLIC: list
-    public function index()
+    public function index(Request $request)
     {
-        $news = News::with('user')
-            ->orderByDesc('published_at')
-            ->paginate(10);
+        $query = News::with(['user', 'tags'])
+            ->orderByDesc('published_at');
+
+        // Filter by tag if provided
+        if ($request->has('tag')) {
+            $query->whereHas('tags', function ($q) use ($request) {
+                $q->where('tags.id', $request->tag);
+            });
+        }
+
+        $news = $query->paginate(10);
+        $tags = Tag::orderBy('name')->get();
 
         // Si no hay noticias, obtener datos de la API de fitness
         $apiNews = collect();
@@ -42,13 +52,13 @@ class NewsController extends Controller
             });
         }
 
-        return view('news.index', compact('news', 'apiNews'));
+        return view('news.index', compact('news', 'apiNews', 'tags'));
     }
 
     // PUBLIC: detail
     public function show(News $news)
     {
-        $news->load(['user', 'comments.user']);
+        $news->load(['user', 'tags', 'comments.user']);
         
         // Si es una petición AJAX, devolver JSON
         if (request()->wantsJson() || request()->ajax()) {
@@ -84,7 +94,8 @@ class NewsController extends Controller
     // ADMIN: create form
     public function create()
     {
-        return view('news.create');
+        $tags = Tag::orderBy('name')->get();
+        return view('news.create', compact('tags'));
     }
 
     // ADMIN: store
@@ -95,6 +106,8 @@ class NewsController extends Controller
             'content' => 'required|string',
             'published_at' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
         $data = [
@@ -109,6 +122,11 @@ class NewsController extends Controller
         }
 
         $news = News::create($data);
+        
+        // Sync tags
+        if (isset($validated['tags'])) {
+            $news->tags()->sync($validated['tags']);
+        }
 
         return redirect()->route('news.show', $news)->with('success', 'News created.');
     }
@@ -116,7 +134,8 @@ class NewsController extends Controller
     // ADMIN: edit form
     public function edit(News $news)
     {
-        return view('news.edit', compact('news'));
+        $tags = Tag::orderBy('name')->get();
+        return view('news.edit', compact('news', 'tags'));
     }
 
     // ADMIN: update
@@ -127,6 +146,8 @@ class NewsController extends Controller
             'content' => 'required|string',
             'published_at' => 'nullable|date',
             'image' => 'nullable|image|max:2048',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
         $data = [
@@ -143,6 +164,13 @@ class NewsController extends Controller
         }
 
         $news->update($data);
+        
+        // Sync tags
+        if (isset($validated['tags'])) {
+            $news->tags()->sync($validated['tags']);
+        } else {
+            $news->tags()->sync([]);
+        }
 
         return redirect()->route('news.show', $news)->with('success', 'News updated.');
     }
