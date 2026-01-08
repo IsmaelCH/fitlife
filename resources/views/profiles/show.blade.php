@@ -31,6 +31,29 @@
                 <p class="text-gray-600 dark:text-gray-300 max-w-lg leading-relaxed">{{ $user->bio }}</p>
             @endif
 
+            <!-- User Statistics -->
+            <div class="mt-6 flex items-center gap-6 text-center">
+                <div class="flex flex-col">
+                    <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ $user->profilePosts->count() }}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 font-light">Wall Posts</span>
+                </div>
+                <div class="w-px h-8 bg-gray-300 dark:bg-gray-600"></div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ $user->newsComments->count() }}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 font-light">Comments</span>
+                </div>
+                <div class="w-px h-8 bg-gray-300 dark:bg-gray-600"></div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ $user->news->count() }}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 font-light">News Posts</span>
+                </div>
+            </div>
+
+            <div class="mt-4 text-xs text-gray-500 dark:text-gray-400 font-light flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Member since {{ $user->created_at->format('F Y') }}
+            </div>
+
             @auth
                 @if(auth()->id() === $user->id)
                     <a class="mt-6 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-gray-400 transition-colors"

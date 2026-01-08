@@ -12,9 +12,10 @@ class NewsController extends Controller
     public function __construct()
     {
         // Public can see index + show
-        // Admin only for create/edit/delete
+        // Authenticated users can create
+        // Only owner or admin can update/delete
         $this->middleware('auth')->except(['index', 'show']);
-        $this->middleware('can:admin')->except(['index', 'show']);
+        $this->middleware('can:admin')->only(['edit', 'update']);
     }
 
     // PUBLIC: list
@@ -23,6 +24,15 @@ class NewsController extends Controller
         $query = News::with(['user', 'tags'])
             ->orderByDesc('published_at');
 
+        // Search by title or content
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('content', 'like', '%' . $search . '%');
+            });
+        }
+
         // Filter by tag if provided
         if ($request->has('tag')) {
             $query->whereHas('tags', function ($q) use ($request) {
@@ -30,7 +40,7 @@ class NewsController extends Controller
             });
         }
 
-        $news = $query->paginate(10);
+        $news = $query->paginate(10)->withQueryString();
         $tags = Tag::orderBy('name')->get();
 
         return view('news.index', compact('news', 'tags'));
@@ -156,14 +166,24 @@ class NewsController extends Controller
         return redirect()->route('news.show', $news)->with('success', 'News updated.');
     }
 
-    // ADMIN: delete
+    // USER: delete (own) or ADMIN: delete (any)
     public function destroy(News $news)
     {
+        // Check if user is the owner or is admin
+        if ($news->user_id !== auth()->id() && !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
         if ($news->image_path) {
             Storage::disk('public')->delete($news->image_path);
         }
 
         $news->delete();
+
+        // Handle JSON requests for AJAX
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'News deleted.']);
+        }
 
         return redirect()->route('news.index')->with('success', 'News deleted.');
     }

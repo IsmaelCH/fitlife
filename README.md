@@ -60,6 +60,8 @@ This project was developed as part of an assignment for Erasmus Hogeschool Bruss
 ### Extra features
 - **News comment system** — Users can comment on news articles with AJAX-powered real-time updates
 - **Tag filtering** — Filter news by tags using many-to-many relationship
+- **Search functionality** — Search news by title/content and FAQ by questions/answers
+- **User statistics** — Profile pages display post count, comment count, and member since date
 - **Admin contact inbox** — View all contact messages and reply by email
 - **Profile wall** — Users can post messages on other users' profiles
 - **Profile post comments** — Users can comment on wall posts

@@ -14,10 +14,26 @@ class NewsCommentController extends Controller
             'body' => 'required|string|max:1000',
         ]);
 
-        $news->comments()->create([
+        $comment = $news->comments()->create([
             'user_id' => $request->user()->id,
             'body' => $validated['body'],
         ]);
+
+        // Return JSON for AJAX requests
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'comment' => [
+                    'id' => $comment->id,
+                    'body' => $comment->body,
+                    'created_at' => $comment->created_at->diffForHumans(),
+                    'user' => [
+                        'id' => $comment->user->id,
+                        'name' => $comment->user->username ?? $comment->user->name,
+                    ],
+                ],
+            ]);
+        }
 
         return redirect()->route('news.show', $news)->with('success', 'Comment added.');
     }
@@ -33,6 +49,11 @@ class NewsCommentController extends Controller
 
         $newsId = $comment->news_id;
         $comment->delete();
+
+        // Return JSON for AJAX requests
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json(['success' => true]);
+        }
 
         return redirect()->route('news.show', $newsId)->with('success', 'Comment deleted.');
     }

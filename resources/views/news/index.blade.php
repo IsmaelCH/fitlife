@@ -12,14 +12,32 @@
             </p>
         </div>
 
-        @can('admin')
+        @auth
             <a class="group inline-flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg transition-all duration-300 hover:bg-gray-800 dark:hover:bg-gray-100 hover:shadow-lg hover:-translate-y-0.5 font-medium text-sm" href="{{ route('news.create') }}">
                 <svg class="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
                 Create News
             </a>
-        @endcan
+        @endauth
+    </div>
+
+    <!-- Search Bar -->
+    <div class="mb-8">
+        <form method="GET" action="{{ route('news.index') }}" class="relative">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search news by title or content..." class="w-full px-5 py-3 pl-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-light focus:border-gray-900 dark:focus:border-gray-400 focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-400 transition-all">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            @if(request('search'))
+                <a href="{{ route('news.index') }}" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </a>
+            @endif
+        </form>
+        @if(request('search'))
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 font-light">
+                Showing results for "<span class="font-medium">{{ request('search') }}</span>"
+            </p>
+        @endif
     </div>
 
     @if(isset($tags) && $tags->count() > 0)
@@ -101,11 +119,20 @@
         <div class="bg-white dark:bg-gray-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden border border-gray-200 dark:border-gray-700">
             <div class="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 p-6 flex justify-between items-center z-10">
                 <h2 id="modalTitle" class="text-2xl font-light text-gray-900 dark:text-white"></h2>
-                <button onclick="closeNewsModal()" class="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
+                <div class="flex items-center gap-3">
+                    @auth
+                        <button id="deleteNewsBtn" onclick="openDeleteNewsModal()" class="hidden text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    @endauth
+                    <button onclick="closeNewsModal()" class="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             
             <div class="overflow-y-auto max-h-[calc(90vh-80px)]">
@@ -164,8 +191,60 @@
         </div>
     </div>
 
+    <!-- Modal de confirmación para borrar comentario -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/60 z-[60] hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 rounded-lg max-w-md w-full p-6 border border-gray-200 dark:border-gray-700 shadow-2xl">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="p-2 bg-red-100 dark:bg-red-900/30 rounded-full">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Delete Comment</h3>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 mb-6 font-light">
+                Are you sure you want to delete this comment? This action cannot be undone.
+            </p>
+            <div class="flex gap-3 justify-end">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-light">
+                    Cancel
+                </button>
+                <button id="confirmDeleteBtn" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors font-light">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para borrar post -->
+    <div id="deleteNewsModal" class="fixed inset-0 bg-black/60 z-[70] hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 rounded-lg max-w-md w-full p-6 border border-gray-200 dark:border-gray-700 shadow-2xl">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="p-2 bg-red-100 dark:bg-red-900/30 rounded-full">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Delete News Post</h3>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 mb-6 font-light">
+                Are you sure you want to delete this news post? This will also delete all comments. This action cannot be undone.
+            </p>
+            <div class="flex gap-3 justify-end">
+                <button onclick="closeDeleteNewsModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-light">
+                    Cancel
+                </button>
+                <button id="confirmDeleteNewsBtn" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors font-light">
+                    Delete Post
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentNewsId = null;
+        const currentUserId = {!! auth()->id() ?? 'null' !!};
+        const isAdmin = {{ auth()->check() && auth()->user()->is_admin ? 'true' : 'false' }};
 
         function openNewsModal(newsId) {
             const modal = document.getElementById('newsModal');
@@ -210,6 +289,16 @@
                 const newsIdInput = document.getElementById('newsIdInput');
                 if (newsIdInput) {
                     newsIdInput.value = newsId;
+                }
+                
+                // Mostrar/ocultar botón de eliminar post
+                const deleteNewsBtn = document.getElementById('deleteNewsBtn');
+                if (deleteNewsBtn && currentUserId !== null) {
+                    if (isAdmin || data.user.id === currentUserId) {
+                        deleteNewsBtn.classList.remove('hidden');
+                    } else {
+                        deleteNewsBtn.classList.add('hidden');
+                    }
                 }
                 
                 // Renderizar comentarios
@@ -315,12 +404,30 @@
             });
         });
 
+        let commentToDelete = null;
+
+        function openDeleteModal(commentId) {
+            commentToDelete = commentId;
+            const modal = document.getElementById('deleteModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeDeleteModal() {
+            commentToDelete = null;
+            const modal = document.getElementById('deleteModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
         function deleteComment(commentId) {
-            if (!confirm('Are you sure you want to delete this comment?')) {
-                return;
-            }
+            openDeleteModal(commentId);
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            if (!commentToDelete) return;
             
-            fetch(`/news-comments/${commentId}`, {
+            fetch(`/news-comments/${commentToDelete}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -330,6 +437,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    closeDeleteModal();
                     // Recargar los datos del modal
                     openNewsModal(currentNewsId);
                 }
@@ -337,8 +445,62 @@
             .catch(error => {
                 console.error('Error deleting comment:', error);
                 alert('Error deleting comment. Please try again.');
+                closeDeleteModal();
             });
+        });
+
+        // Cerrar modal al hacer click fuera
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        // Funciones para modal de borrar post
+        function openDeleteNewsModal() {
+            const modal = document.getElementById('deleteNewsModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
+
+        function closeDeleteNewsModal() {
+            const modal = document.getElementById('deleteNewsModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.getElementById('confirmDeleteNewsBtn').addEventListener('click', function() {
+            if (!currentNewsId) return;
+            
+            fetch(`/news/${currentNewsId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeDeleteNewsModal();
+                    closeNewsModal();
+                    // Recargar la página para actualizar la lista
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting news:', error);
+                alert('Error deleting news post. Please try again.');
+                closeDeleteNewsModal();
+            });
+        });
+
+        // Cerrar modal de borrar post al hacer click fuera
+        document.getElementById('deleteNewsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteNewsModal();
+            }
+        });
         @endauth
 
         function closeNewsModal() {

@@ -83,6 +83,16 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/news-comments/{comment}', [NewsCommentController::class, 'destroy'])
         ->name('news.comments.destroy');
+
+    // News create/delete (students can create and delete own posts)
+    Route::get('/news/create', [NewsController::class, 'create'])
+        ->name('news.create');
+    
+    Route::post('/news', [NewsController::class, 'store'])
+        ->name('news.store');
+    
+    Route::delete('/news/{news}', [NewsController::class, 'destroy'])
+        ->name('news.destroy');
 });
 
 
@@ -116,9 +126,14 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::post('/admin/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])
         ->name('admin.users.toggleAdmin');
 
-    // News CRUD (admin)
-    Route::resource('news', NewsController::class)
-        ->except(['index', 'show']);
+    // News edit/update (admin only)
+    Route::get('/news/{news}/edit', [NewsController::class, 'edit'])
+        ->name('news.edit');
+    
+    Route::put('/news/{news}', [NewsController::class, 'update'])
+        ->name('news.update');
+    
+    Route::patch('/news/{news}', [NewsController::class, 'update']);
 
     // FAQ CRUD (admin)
     Route::resource('faq-categories', FaqCategoryController::class);
