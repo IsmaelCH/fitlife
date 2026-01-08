@@ -64,7 +64,6 @@ This project was developed as part of an assignment for Erasmus Hogeschool Bruss
 - **Profile wall** — Users can post messages on other users' profiles
 - **Profile post comments** — Users can comment on wall posts
 - **Modal popups** — View full news articles and profile posts in elegant modals
-- **Wger Fitness API integration** — Display exercises, nutrition info, and workout plans
 - **Dark mode support** — Complete dark mode with smooth transitions
 - **Responsive design** — Mobile-first approach with Tailwind CSS
 ---
@@ -159,11 +158,6 @@ All inverse relationships properly defined using `belongsTo`
 - **Alpine.js Documentation**  
   https://alpinejs.dev  
   Lightweight JavaScript framework for interactivity
-
-### External APIs
-- **Wger Workout Manager API**  
-  https://wger.de/api/v2/  
-  Free fitness API for exercises, nutrition, and workout plans
 
 ### Development Tools & AI Assistants
 - **GitHub Copilot**  

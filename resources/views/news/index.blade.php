@@ -86,38 +86,7 @@
                 </div>
             </article>
         @empty
-            @if(isset($apiNews) && $apiNews->count() > 0)
-                @foreach($apiNews as $item)
-                    <article class="group bg-white dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 overflow-hidden transition-all hover:border-gray-900 dark:hover:border-white duration-300">
-                        @if(!empty($item->image_url))
-                            <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="{{ $item->image_url }}" alt="Exercise image">
-                                <div class="absolute top-4 right-4">
-                                    <span class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-xs font-medium px-3 py-1 rounded-full border border-gray-300 dark:border-gray-700">
-                                        API
-                                    </span>
-                                </div>
-                            </div>
-                        @endif
-
-                        <div class="p-6">
-                            <div class="text-xl font-light text-gray-900 dark:text-white transition-colors mb-3 line-clamp-2">
-                                {{ $item->title }}
-                            </div>
-
-                            <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-4 pb-4 border-b border-gray-100 dark:border-gray-700">
-                                <span>{{ $item->author }}</span>
-                            </div>
-
-                            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3 font-light">
-                                {{ \Illuminate\Support\Str::limit($item->content, 120) }}
-                            </p>
-                        </div>
-                    </article>
-                @endforeach
-            @else
-                <p class="text-gray-600 dark:text-gray-300">No news yet.</p>
-            @endif
+            <p class="text-gray-600 dark:text-gray-300">No news yet.</p>
         @endforelse
     </div>
 
