@@ -105,10 +105,7 @@ This project was developed as part of an assignment for Erasmus Hogeschool Bruss
 9. Build assets: `npm run dev`
 10. Start server: `php artisan serve` or use Laravel Herd
 
-Default admin credentials (from seeder):
-- Username: admin
-- Email: admin@ehb.be
-- Password: Password!321
+
 
 ---
 
