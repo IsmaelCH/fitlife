@@ -8,6 +8,37 @@ use Illuminate\Http\Request;
 
 class ProfilePostController extends Controller
 {
+    public function show(ProfilePost $post)
+    {
+        // Si es una petición AJAX, devolver JSON
+        if (request()->wantsJson() || request()->ajax()) {
+            $post->load(['author', 'comments.user']);
+            return response()->json([
+                'id' => $post->id,
+                'body' => $post->body,
+                'author' => [
+                    'name' => $post->author->username ?? $post->author->name,
+                ],
+                'created_at' => $post->created_at->format('M d, Y \\a\\t H:i'),
+                'created_at_human' => $post->created_at->diffForHumans(),
+                'comments' => $post->comments->map(function($comment) {
+                    return [
+                        'id' => $comment->id,
+                        'body' => $comment->body,
+                        'user' => [
+                            'id' => $comment->user_id,
+                            'name' => $comment->user->username ?? $comment->user->name,
+                        ],
+                        'created_at_human' => $comment->created_at->diffForHumans(),
+                        'can_delete' => auth()->check() && (auth()->user()->can('admin') || auth()->id() === $comment->user_id),
+                    ];
+                }),
+            ]);
+        }
+        
+        abort(404);
+    }
+
     public function store(Request $request, User $user)
     {
         $validated = $request->validate([

@@ -46,6 +46,9 @@ Route::post('/contact', [ContactController::class, 'submit'])
 Route::get('/profiles/{user}', [ProfileController::class, 'show'])
     ->name('profiles.show');
 
+Route::get('/posts/{post}', [ProfilePostController::class, 'show'])
+    ->name('posts.show');
+
 /*
 |--------------------------------------------------------------------------
 | Logged-in user (profile edit)
@@ -65,6 +68,13 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/profile-posts/{post}', [ProfilePostController::class, 'destroy'])
         ->name('profiles.posts.destroy');
+
+    // Profile post comments
+    Route::post('/profile-posts/{post}/comments', [\App\Http\Controllers\ProfilePostCommentController::class, 'store'])
+        ->name('profile-posts.comments.store');
+
+    Route::delete('/profile-post-comments/{comment}', [\App\Http\Controllers\ProfilePostCommentController::class, 'destroy'])
+        ->name('profile-posts.comments.destroy');
 
     // All authenticated users can comment on news
     Route::post('/news/{news}/comments', [NewsCommentController::class, 'store'])

@@ -13,11 +13,11 @@
     </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 antialiased transition-colors duration-300">
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 antialiased font-light transition-colors duration-300">
 @include('partials.nav')
 <main class="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
     @if(session('success'))
-        <div class="bg-white dark:bg-gray-800 border border-green-100 dark:border-green-900 text-green-700 dark:text-green-400 px-4 py-3 mb-6 rounded-lg shadow-sm text-sm" role="alert">
+        <div class="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 mb-6 rounded-lg text-sm" role="alert">
             {{ session('success') }}
         </div>
     @endif

@@ -17,4 +17,9 @@ class ProfilePost extends Model
     {
         return $this->belongsTo(User::class, 'author_user_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(ProfilePostComment::class)->latest();
+    }
 }

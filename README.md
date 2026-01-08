@@ -52,37 +52,141 @@ This project was developed as part of an assignment for Erasmus Hogeschool Bruss
 ### Extra features
 - Users can comment on news items
 - Admin contact inbox with reply functionality
-- Profile wall (users can post messages on other users’ profiles)
+- Profile wall (users can post messages on other users’ profiles)- Profile post comments (users can comment on wall posts)
+- Modal popups for viewing full news articles and profile posts
+- Wger Fitness API integration for exercises, nutrition, and workout plans
+---
+
+## Technical Stack
+
+### Backend
+- **PHP 8.4+**
+- **Laravel 12** (latest version)
+- **SQLite** (default) or MySQL/PostgreSQL
+- **Laravel Breeze** for authentication scaffolding
+- **Eloquent ORM** for database operations
+
+### Frontend
+- **Tailwind CSS** for styling
+- **Blade** templating engine
+- **Vite** for asset bundling
+- **Alpine.js** (included with Breeze)
+- Vanilla JavaScript for modal interactions and AJAX
+
+### Development Tools
+- **Composer** (PHP dependency manager)
+- **NPM** (Node package manager)
+- **Laravel Herd** or any local PHP server
+- **Git** for version control
 
 ---
 
-## Technical requirements
+## Installation & Setup
 
-- PHP 8.4+
-- Composer
-- Node.js + npm
-- Laravel 12
-- SQLite (default) or MySQL
-- Herd or any local PHP server
+1. Clone the repository
+2. Install PHP dependencies: `composer install`
+3. Install Node dependencies: `npm install`
+4. Copy `.env.example` to `.env`
+5. Generate application key: `php artisan key:generate`
+6. Run migrations: `php artisan migrate`
+7. Seed database: `php artisan db:seed`
+8. Link storage: `php artisan storage:link`
+9. Build assets: `npm run dev`
+10. Start server: `php artisan serve` or use Laravel Herd
+
+Default admin credentials (from seeder):
+- Email: admin@fitlife.test
+- Password: password
 
 ---
 
-## Sources / References
+## Sources & Resources
 
-- Laravel Documentation  
-  https://laravel.com/docs
+### Documentation & Frameworks
+- **Laravel Documentation**  
+  https://laravel.com/docs  
+  Complete framework documentation and guides
 
-- Laravel Breeze (authentication starter kit)  
-  https://laravel.com/docs/starter-kits#laravel-breeze
+- **Laravel Breeze**  
+  https://laravel.com/docs/starter-kits#laravel-breeze  
+  Authentication starter kit with Blade templates
 
-- Tailwind CSS Documentation (UI styling)  
-  https://tailwindcss.com/docs
+- **Tailwind CSS Documentation**  
+  https://tailwindcss.com/docs  
+  Utility-first CSS framework for styling
 
-- PHP Documentation  
-  https://www.php.net/docs.php
+- **PHP Documentation**  
+  https://www.php.net/docs.php  
+  Official PHP language reference
 
-- OpenAI ChatGPT  
+- **Alpine.js Documentation**  
+  https://alpinejs.dev  
+  Lightweight JavaScript framework for interactivity
+
+### External APIs
+- **Wger Workout Manager API**  
+  https://wger.de/api/v2/  
+  Free fitness API for exercises, nutrition, and workout plans
+
+### Development Tools & AI Assistants
+- **GitHub Copilot**  
+  https://github.com/features/copilot  
+  AI-powered code completion and assistance tool used throughout development
+  for code suggestions, debugging, and learning Laravel best practices
+
+- **OpenAI ChatGPT**  
   https://chat.openai.com  
-  Used as a learning and support tool for understanding Laravel concepts,
-  debugging errors, and improving code structure. All final code decisions
-  and implementation were done by the student.
+  Used as a learning tool for understanding Laravel concepts, debugging errors,
+  exploring design patterns, and improving code structure
+
+- **Claude (Anthropic)**  
+  AI assistant used for code review, architecture decisions, and implementation
+  guidance throughout the project development
+
+### Design Resources
+- **Unsplash**  
+  https://unsplash.com  
+  Stock photos for news article placeholders
+
+- **Heroicons**  
+  https://heroicons.com  
+  SVG icon set integrated throughout the interface
+
+### Learning Resources
+- **Laracasts**  
+  https://laracasts.com  
+  Video tutorials for Laravel best practices
+
+- **Laravel News**  
+  https://laravel-news.com  
+  Latest Laravel ecosystem updates and tutorials
+
+- **Stack Overflow**  
+  https://stackoverflow.com  
+  Community Q&A for troubleshooting specific issues
+
+- **MDN Web Docs**  
+  https://developer.mozilla.org  
+  JavaScript, HTML, and CSS reference documentation
+
+---
+
+## Academic Integrity Statement
+
+All code in this project was written by the student with assistance from AI tools
+(GitHub Copilot, ChatGPT, Claude) used as learning aids and productivity enhancers.
+The student maintains full understanding of all implemented features and can explain
+any part of the codebase. AI tools were used for:
+- Code suggestions and autocompletion
+- Debugging assistance
+- Learning Laravel best practices
+- Exploring different implementation approaches
+
+Final decisions on architecture, design, and implementation were made by the student.
+
+---
+
+## License
+
+This is an educational project developed for Erasmus Hogeschool Brussel.
+All rights reserved by the student author.
