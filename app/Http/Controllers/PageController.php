@@ -11,15 +11,8 @@ class PageController extends Controller
 {
     public function home()
     {
-        $latestNews = News::with('user:id,name,username')
-            ->select('id', 'user_id', 'title', 'image_path', 'published_at')
-            ->latest('published_at')
-            ->take(3)
-            ->get();
-        $faqCategories = FaqCategory::with('faqs:id,faq_category_id,question')
-            ->select('id', 'name')
-            ->orderBy('name')
-            ->get();
+        $latestNews = News::latest('published_at')->take(3)->get();
+        $faqCategories = FaqCategory::with('faqs')->orderBy('name')->get();
 
         // API fallback for News
         $apiNews = collect();

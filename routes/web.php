@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile-posts/{post}', [ProfilePostController::class, 'destroy'])
         ->name('profiles.posts.destroy');
 
+    // All authenticated users can comment on news
     Route::post('/news/{news}/comments', [NewsCommentController::class, 'store'])
         ->whereNumber('news')
         ->name('news.comments.store');

@@ -19,10 +19,7 @@ class FaqController extends Controller
     // PUBLIC FAQ PAGE
     public function index()
     {
-        $categories = FaqCategory::with('faqs:id,faq_category_id,question,answer')
-            ->select('id', 'name')
-            ->orderBy('name')
-            ->get();
+        $categories = FaqCategory::with('faqs')->orderBy('name')->get();
 
         // API fallback for FAQ - Gym/Fitness focused
         $apiFaq = collect();
